@@ -17,9 +17,19 @@ public class MovementNetworkController : NetworkBehaviour
         {
             float moveX = Input.GetAxis("Horizontal");
             float moveZ = Input.GetAxis("Vertical");
+            float moveY = 0f;
+
+            if (Input.GetKey(KeyCode.Space)) // Fly up
+            {
+                moveY = 1f;
+            }
+            else if (Input.GetKey(KeyCode.LeftShift)) // Fly down
+            {
+                moveY = -1f;
+            }
 
 
-            Vector3 movement = new Vector3(moveX, 0f, moveZ) * 5 * Time.deltaTime;
+            Vector3 movement = new Vector3(moveX, moveY, moveZ) * 5 * Time.deltaTime;
             transform.Translate(movement, Space.World);
             SubmitPositionRequestServerRpc(transform.position);
         }

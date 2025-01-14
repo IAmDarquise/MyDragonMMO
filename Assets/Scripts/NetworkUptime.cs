@@ -12,11 +12,9 @@ public class NetworkUptime : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI uptimeText;
     [SerializeField] private TextMeshProUGUI connectedClientsText;
     [SerializeField] private TextMeshProUGUI deviceTypeText;
-    [SerializeField] private TextMeshProUGUI playerColorText;
 
     private int connectedClientsAmount = 0;
     private FixedString64Bytes deviceType = new FixedString64Bytes();
-    private Color playerColor;
 
 
 
@@ -26,7 +24,6 @@ public class NetworkUptime : NetworkBehaviour
         Assert.IsNotNull(uptimeText);
         Assert.IsNotNull(connectedClientsText);
         Assert.IsNotNull(deviceTypeText);
-        Assert.IsNotNull(playerColorText);
     }
     public override void OnNetworkSpawn()
     {
@@ -70,7 +67,6 @@ public class NetworkUptime : NetworkBehaviour
             deviceTypeText.text = deviceType.ToString();
             uptimeText.text = "Uptime: " + ServerUptimeNetworkVariable.Value.ToString();
             connectedClientsText.text = "ConnectedClients: " + connectedClientsAmount.ToString();
-            playerColorText.text = "Your Color" + playerColor.ToString();
 
 
         }
