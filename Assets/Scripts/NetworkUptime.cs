@@ -1,5 +1,6 @@
 using TMPro;
 using Unity.Netcode;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 public class NetworkUptime : NetworkBehaviour
@@ -8,14 +9,24 @@ public class NetworkUptime : NetworkBehaviour
     private float last_t = 0.0f;
 
 
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI uptimeText;
+    [SerializeField] private TextMeshProUGUI connectedClientsText;
+    [SerializeField] private TextMeshProUGUI deviceTypeText;
+    [SerializeField] private TextMeshProUGUI playerColorText;
+
+    private int connectedClientsAmount = 0;
+    private FixedString64Bytes deviceType = new FixedString64Bytes();
+    private Color playerColor;
 
 
 
 
     private void Start()
     {
-        Assert.IsNotNull(text);
+        Assert.IsNotNull(uptimeText);
+        Assert.IsNotNull(connectedClientsText);
+        Assert.IsNotNull(deviceTypeText);
+        Assert.IsNotNull(playerColorText);
     }
     public override void OnNetworkSpawn()
     {
@@ -23,12 +34,21 @@ public class NetworkUptime : NetworkBehaviour
         {
             ServerUptimeNetworkVariable.Value = 0.0f;
             Debug.Log("Server's uptime var initialized to: " + ServerUptimeNetworkVariable.Value);
+            deviceType = "Server";
+        }
+
+        if(IsClient)
+        {
+            deviceType = "Client";
         }
     }
 
 
     void Update()
     {
+        connectedClientsAmount = NetworkManager.Singleton.ConnectedClients.Count;
+
+
         var t_now = Time.time;
         if (IsServer)
         {
@@ -37,13 +57,22 @@ public class NetworkUptime : NetworkBehaviour
             {
                 last_t = t_now;
                 Debug.Log("Server uptime var has been updated to: " + ServerUptimeNetworkVariable.Value);
+
+                deviceTypeText.text = deviceType.ToString();
+                uptimeText.text = "Uptime: " + ServerUptimeNetworkVariable.Value.ToString();
+                connectedClientsText.text = "ConnectedClients: " + connectedClientsAmount.ToString();
             }
         }
 
 
         if (!IsServer)
         {
-            text.text = ServerUptimeNetworkVariable.Value.ToString();
+            deviceTypeText.text = deviceType.ToString();
+            uptimeText.text = "Uptime: " + ServerUptimeNetworkVariable.Value.ToString();
+            connectedClientsText.text = "ConnectedClients: " + connectedClientsAmount.ToString();
+            playerColorText.text = "Your Color" + playerColor.ToString();
+
+
         }
     }
 }
