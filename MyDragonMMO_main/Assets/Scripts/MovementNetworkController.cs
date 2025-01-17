@@ -161,9 +161,9 @@ public class MovementNetworkController : NetworkBehaviour
 
     void SetRandomPlayerPosition()
     {
-        float xPos = Random.Range(-10.0f, 10.0f);
-        float yPos = Random.Range(-10.0f, 10.0f);
-        Vector3 newPosition = new Vector3(xPos, yPos, 10f);
+        float xPos = Random.Range(-20.0f, 20.0f);
+        float zPos = Random.Range(-20.0f, 20.0f);
+        Vector3 newPosition = new Vector3(xPos, 10f, zPos);
 
         if (IsOwner)
         {

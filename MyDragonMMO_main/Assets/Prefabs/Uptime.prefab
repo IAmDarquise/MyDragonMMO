@@ -663,3 +663,4 @@ MonoBehaviour:
   uptimeText: {fileID: 3986186125737422137}
   connectedClientsText: {fileID: 3014669205867983027}
   deviceTypeText: {fileID: 8608351776266522519}
+  canvas: {fileID: 3466697151673044875}

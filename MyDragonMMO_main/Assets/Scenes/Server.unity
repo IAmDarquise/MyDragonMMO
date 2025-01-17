@@ -605,6 +605,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3818002440
       objectReference: {fileID: 0}
+    - target: {fileID: 2984111710033757186, guid: 2b9365b29c38b8642b9d466488e6f1f7, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1311161394
+      objectReference: {fileID: 0}
     - target: {fileID: 8911191939673611086, guid: 2b9365b29c38b8642b9d466488e6f1f7, type: 3}
       propertyPath: m_Name
       value: Uptime
