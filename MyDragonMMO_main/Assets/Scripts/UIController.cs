@@ -8,7 +8,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private int greenInput;
     [SerializeField] private int blueInput;
     [SerializeField] private Image colourPreview;
-    [SerializeField]private Color newColour;
+    [SerializeField] private Color newColour;
+    [SerializeField] private Material playerMaterial;
 
 
 
@@ -30,7 +31,7 @@ public class UIController : MonoBehaviour
         LoadGame();
     }
 
-    void LoadGame()
+    public void LoadGame()
     {
         SceneManager.LoadScene("Client");
     }
@@ -63,9 +64,23 @@ public class UIController : MonoBehaviour
 
     public void PreviewColour()
     {
-        newColour = new Color(redInput, greenInput, blueInput);
+        //newColour = new Color(redInput, greenInput, blueInput);
 
         colourPreview.color = newColour;
     }
+
+    public void OnColorChange(Color color)
+    {
+        colourPreview.color = color;
+        playerMaterial.color = color;
+    }
+
+    public void UseCustomColour()
+    {
+        PlayerPrefs.SetInt("Colour", 0);
+        LoadGame();
+    }
+
+
 
 }

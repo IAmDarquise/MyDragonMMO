@@ -22,6 +22,7 @@ public class MovementNetworkController : NetworkBehaviour
     [SerializeField] private Material materialBlue;
     [SerializeField] private Material materialOrange;
     [SerializeField] private Material materialGreen;
+    [SerializeField] private Material materialCustom;
 
     [SerializeField] private MeshRenderer[] playerMeshes;
 
@@ -55,10 +56,6 @@ public class MovementNetworkController : NetworkBehaviour
         //    PlayerName.Value = PlayerPrefs.GetString("Name");
         //    PlayerColourID.Value = PlayerPrefs.GetInt("Colour");
         //}
-        //else
-        //{
-        //    Debug.Log("Not the Owner");
-        //}
 
 
         ApplyPlayerValues();
@@ -72,10 +69,15 @@ public class MovementNetworkController : NetworkBehaviour
 
         playerName.text = PlayerName.Value.ToString();
         playerColourID = PlayerColourID.Value;
+        //playerName.text = PlayerPrefs.GetString("Name");
+        //playerColourID = PlayerPrefs.GetInt("Colour");
 
         Debug.Log(playerColourID);
         switch(playerColourID)
         {
+            case 0:
+                ChangeMaterial(materialCustom);
+                break;
             case 1:
                 ChangeMaterial(materialBlue);
                 break;
@@ -194,14 +196,19 @@ public class MovementNetworkController : NetworkBehaviour
         {
             SubmitPlayerInfoServerRpc(PlayerPrefs.GetString("Name"), PlayerPrefs.GetInt("Colour"));
             cam.enabled = true;
+            cam.GetComponent<AudioListener>().enabled = true;
 
         }
         else
         {
             cam.enabled = false;
+            cam.GetComponent<AudioListener>().enabled = false;
         }
 
-        PlayerName.OnValueChanged += (oldValue, newValue) => { playerName.text = newValue.ToString(); };
+        //playerName.text = PlayerName.Value.ToString();
+        //ApplyPlayerValues();
+
+        PlayerName.OnValueChanged += (oldValue, newValue) => { ApplyPlayerValues(); };
         PlayerColourID.OnValueChanged += (oldValue, newValue) => { ApplyPlayerValues(); };
     }
 }

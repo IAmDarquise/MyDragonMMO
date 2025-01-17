@@ -167,6 +167,7 @@ MonoBehaviour:
   materialBlue: {fileID: 2100000, guid: 94b7b163ffabb034a91fccbbff56750c, type: 2}
   materialOrange: {fileID: 2100000, guid: 38d52e1ca2fb45e4fa22d80590f16061, type: 2}
   materialGreen: {fileID: 2100000, guid: 4634e01ca38983e45a3e02fa9892b0cc, type: 2}
+  materialCustom: {fileID: 2100000, guid: 533dba87f46a1994592062a82b583d0d, type: 2}
   playerMeshes: []
   playerName: {fileID: 5010759025023848906}
   cam: {fileID: 1837986033267660631}
