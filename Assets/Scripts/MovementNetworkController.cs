@@ -66,7 +66,7 @@ public class MovementNetworkController : NetworkBehaviour
 
     void ApplyPlayerValues()
     {
-        //cam = Camera.main;
+        cam = Camera.main;
 
         playerMeshes = GetComponentsInChildren<MeshRenderer>();
 
@@ -106,18 +106,6 @@ public class MovementNetworkController : NetworkBehaviour
     {
         
 
-        if (playerName == null)
-        {
-            Debug.LogError("PlayerName is not assigned!");
-            return;
-        }
-        if (Camera.main == null)
-        {
-            Debug.LogError("Camera.main is not found! Make sure your camera has the 'MainCamera' tag.");
-            return;
-        }
-
-
         playerName.gameObject.transform.LookAt(cam.transform);
         playerName.gameObject.transform.Rotate(0, 180, 0);
 
@@ -139,6 +127,12 @@ public class MovementNetworkController : NetworkBehaviour
             transform.rotation = Rotation.Value;
 
         }
+        else if (!IsOwner)
+        {
+            transform.position = Position.Value;
+            transform.rotation = Rotation.Value;
+        }
+
     }
     void DoMovement()
     {
