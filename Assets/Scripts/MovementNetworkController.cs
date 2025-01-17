@@ -1,11 +1,16 @@
+using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 
 public class MovementNetworkController : NetworkBehaviour
 {
     public NetworkVariable<Vector3> Position = new();
     public NetworkVariable<Quaternion> Rotation = new();
+    public NetworkVariable<FixedString64Bytes> PlayerName = new();
+    public NetworkVariable<int> PlayerColourID = new();
 
     [SerializeField] private float thrustForce = 0;
     [SerializeField] private float strafeForce = 0;
@@ -13,6 +18,18 @@ public class MovementNetworkController : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 0;
 
     [SerializeField] private Rigidbody rb;
+
+    [SerializeField] private Material materialBlue;
+    [SerializeField] private Material materialOrange;
+    [SerializeField] private Material materialGreen;
+
+    [SerializeField] private MeshRenderer[] playerMeshes;
+
+    [SerializeField] private TextMeshPro playerName;
+
+    private int playerColourID;
+
+    [SerializeField] private Camera cam;
 
 
     [Rpc(SendTo.Server)]
@@ -23,42 +40,94 @@ public class MovementNetworkController : NetworkBehaviour
 
     }
 
+    [Rpc(SendTo.Server)]
+    void SubmitPlayerInfoServerRpc(FixedString64Bytes name, int colourID)
+    {
+        PlayerName.Value = name;
+        PlayerColourID.Value = colourID;
+    }
+
 
     private void Start()
     {
-        rb.linearDamping = 1f;
-        rb.angularDamping = 1f;
+        //if (IsOwner)
+        //{
+        //    PlayerName.Value = PlayerPrefs.GetString("Name");
+        //    PlayerColourID.Value = PlayerPrefs.GetInt("Colour");
+        //}
+        //else
+        //{
+        //    Debug.Log("Not the Owner");
+        //}
+
+
+        ApplyPlayerValues();
+    }
+
+    void ApplyPlayerValues()
+    {
+        //cam = Camera.main;
+
+        playerMeshes = GetComponentsInChildren<MeshRenderer>();
+
+        playerName.text = PlayerName.Value.ToString();
+        playerColourID = PlayerColourID.Value;
+
+        Debug.Log(playerColourID);
+        switch(playerColourID)
+        {
+            case 1:
+                ChangeMaterial(materialBlue);
+                break;
+            case 2:
+                ChangeMaterial(materialOrange);
+                break;
+            case 3:
+                ChangeMaterial(materialGreen);
+                break;
+        }
+
+    }
+
+    void ChangeMaterial(Material mat)
+    {
+        foreach (MeshRenderer renderer in playerMeshes)
+        {
+            if (renderer.CompareTag("IgnoreMaterialChange"))
+            {
+                continue;
+            }
+
+            renderer.material = mat;
+        }
     }
 
     void Update()
     {
+        
+
+        if (playerName == null)
+        {
+            Debug.LogError("PlayerName is not assigned!");
+            return;
+        }
+        if (Camera.main == null)
+        {
+            Debug.LogError("Camera.main is not found! Make sure your camera has the 'MainCamera' tag.");
+            return;
+        }
+
+
+        playerName.gameObject.transform.LookAt(cam.transform);
+        playerName.gameObject.transform.Rotate(0, 180, 0);
+
+
+
         if (IsOwner && !IsServer)
         {
-            //float moveX = Input.GetAxis("Horizontal");
-            //float moveZ = Input.GetAxis("Vertical");
-            //float moveY = 0f;
-
-            //if (Input.GetKey(KeyCode.Space)) // Fly up
-            //{
-            //    moveY = 1f;
-            //}
-            //else if (Input.GetKey(KeyCode.LeftShift)) // Fly down
-            //{
-            //    moveY = -1f;
-            //}
 
             DoMovement();
             DoRotation();
-
-
-            //Vector3 movement = new Vector3(moveX, moveY, moveZ) * 5 * Time.deltaTime;
-            //transform.Translate(movement, Space.World);
-
-            //float tiltAmountZ = moveX * -15f;
-            ////float tiltAmountX = 0;
-            //float tiltAmountX = moveY * -15f;
-            //Quaternion targetRotation = Quaternion.Euler(tiltAmountX, transform.rotation.eulerAngles.y, tiltAmountZ);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
 
             SubmitPositionRequestServerRpc(transform.position, transform.rotation);
         }
@@ -123,6 +192,23 @@ public class MovementNetworkController : NetworkBehaviour
 
         rb.rotation = Quaternion.Slerp(currentRotation, targetRotation, Time.deltaTime * 2f);
 
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            SubmitPlayerInfoServerRpc(PlayerPrefs.GetString("Name"), PlayerPrefs.GetInt("Colour"));
+            cam.enabled = true;
+
+        }
+        else
+        {
+            cam.enabled = false;
+        }
+
+        PlayerName.OnValueChanged += (oldValue, newValue) => { playerName.text = newValue.ToString(); };
+        PlayerColourID.OnValueChanged += (oldValue, newValue) => { ApplyPlayerValues(); };
     }
 }
 
