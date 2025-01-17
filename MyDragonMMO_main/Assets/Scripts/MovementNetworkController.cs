@@ -139,10 +139,10 @@ public class MovementNetworkController : NetworkBehaviour
     void DoMovement()
     {
         float move = Input.GetAxis("Vertical");
-        rb.AddForce(transform.forward * move * thrustForce, ForceMode.Force);
+        rb.AddForce(transform.forward * move * thrustForce * Time.deltaTime, ForceMode.Force);
 
         float strafe = Input.GetAxis("Horizontal");
-        rb.AddForce(transform.right * strafe * strafeForce, ForceMode.Force);
+        rb.AddForce(transform.right * strafe * strafeForce * Time.deltaTime, ForceMode.Force);
 
 
         if (Input.GetKey(KeyCode.Space))
