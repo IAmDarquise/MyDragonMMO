@@ -53,12 +53,14 @@ public class MovementNetworkController : NetworkBehaviour
 
     private void Start()
     {
+        SetRandomPlayerPosition();
+
         //if (IsOwner)
         //{
         //    PlayerName.Value = PlayerPrefs.GetString("Name");
         //    PlayerColourID.Value = PlayerPrefs.GetInt("Colour");
         //}
-        if(IsOwner)
+        if (IsOwner)
         {
             PlayerColour.Value = materialCustom.color;
         }
@@ -84,13 +86,13 @@ public class MovementNetworkController : NetworkBehaviour
                 ChangeColour(PlayerColour.Value);
                 break;
             case 1:
-                ChangeMaterial(materialBlue);
+                ChangeColour(materialBlue.color);
                 break;
             case 2:
-                ChangeMaterial(materialOrange);
+                ChangeColour(materialOrange.color);
                 break;
             case 3:
-                ChangeMaterial(materialGreen);
+                ChangeColour(materialGreen.color);
                 break;
         }
 
@@ -156,6 +158,19 @@ public class MovementNetworkController : NetworkBehaviour
         }
 
     }
+
+    void SetRandomPlayerPosition()
+    {
+        float xPos = Random.Range(-10.0f, 10.0f);
+        float yPos = Random.Range(-10.0f, 10.0f);
+        Vector3 newPosition = new Vector3(xPos, yPos, 10f);
+
+        if (IsOwner)
+        {
+            transform.position = newPosition;
+        }
+    }
+
     void DoMovement()
     {
         float move = Input.GetAxis("Vertical");

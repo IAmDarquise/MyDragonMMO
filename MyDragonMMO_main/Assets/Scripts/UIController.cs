@@ -41,34 +41,6 @@ public class UIController : MonoBehaviour
         PlayerPrefs.SetString("Name", name);
     }
 
-    public void SetR(string value)
-    {
-        int.TryParse(value, out int r);
-        redInput = r;
-        PreviewColour();
-    }
-
-    public void SetG(string value)
-    {
-        int.TryParse(value, out int g);
-        greenInput = g;
-        PreviewColour();
-    }
-
-    public void SetB(string value)
-    {
-        int.TryParse(value, out int b);
-        blueInput = b;
-        PreviewColour();
-    }
-
-    public void PreviewColour()
-    {
-        //newColour = new Color(redInput, greenInput, blueInput);
-
-        colourPreview.color = newColour;
-    }
-
     public void OnColorChange(Color color)
     {
         colourPreview.color = color;
