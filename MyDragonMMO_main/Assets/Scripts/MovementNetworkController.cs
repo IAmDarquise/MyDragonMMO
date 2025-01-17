@@ -11,6 +11,7 @@ public class MovementNetworkController : NetworkBehaviour
     public NetworkVariable<Quaternion> Rotation = new();
     public NetworkVariable<FixedString64Bytes> PlayerName = new();
     public NetworkVariable<int> PlayerColourID = new();
+    public NetworkVariable<Color> PlayerColour = new();
 
     [SerializeField] private float thrustForce = 0;
     [SerializeField] private float strafeForce = 0;
@@ -42,10 +43,11 @@ public class MovementNetworkController : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    void SubmitPlayerInfoServerRpc(FixedString64Bytes name, int colourID)
+    void SubmitPlayerInfoServerRpc(FixedString64Bytes name, int colourID, Color colour)
     {
         PlayerName.Value = name;
         PlayerColourID.Value = colourID;
+        PlayerColour.Value = colour;
     }
 
 
@@ -56,7 +58,10 @@ public class MovementNetworkController : NetworkBehaviour
         //    PlayerName.Value = PlayerPrefs.GetString("Name");
         //    PlayerColourID.Value = PlayerPrefs.GetInt("Colour");
         //}
-
+        if(IsOwner)
+        {
+            PlayerColour.Value = materialCustom.color;
+        }
 
         ApplyPlayerValues();
     }
@@ -76,7 +81,7 @@ public class MovementNetworkController : NetworkBehaviour
         switch(playerColourID)
         {
             case 0:
-                ChangeMaterial(materialCustom);
+                ChangeColour(PlayerColour.Value);
                 break;
             case 1:
                 ChangeMaterial(materialBlue);
@@ -101,8 +106,23 @@ public class MovementNetworkController : NetworkBehaviour
             }
 
             renderer.material = mat;
+            //renderer.material.color = PlayerColour.Value;
         }
     }
+    void ChangeColour(Color color)
+    {
+        foreach (MeshRenderer renderer in playerMeshes)
+        {
+            if (renderer.CompareTag("IgnoreMaterialChange"))
+            {
+                continue;
+            }
+
+            //renderer.material = mat;
+            renderer.material.color = color;
+        }
+    }
+
 
     void Update()
     {
@@ -194,7 +214,7 @@ public class MovementNetworkController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            SubmitPlayerInfoServerRpc(PlayerPrefs.GetString("Name"), PlayerPrefs.GetInt("Colour"));
+            SubmitPlayerInfoServerRpc(PlayerPrefs.GetString("Name"), PlayerPrefs.GetInt("Colour"), materialCustom.color);
             cam.enabled = true;
             cam.GetComponent<AudioListener>().enabled = true;
 
@@ -205,11 +225,13 @@ public class MovementNetworkController : NetworkBehaviour
             cam.GetComponent<AudioListener>().enabled = false;
         }
 
-        //playerName.text = PlayerName.Value.ToString();
+        playerName.text = PlayerName.Value.ToString();
+        playerColourID = PlayerColourID.Value;
         //ApplyPlayerValues();
 
-        PlayerName.OnValueChanged += (oldValue, newValue) => { ApplyPlayerValues(); };
-        PlayerColourID.OnValueChanged += (oldValue, newValue) => { ApplyPlayerValues(); };
+        PlayerName.OnValueChanged += (oldValue, newValue) => { playerName.text = newValue.ToString(); };
+        PlayerColourID.OnValueChanged += (oldValue, newValue) => { playerColourID = newValue; };
+        PlayerColour.OnValueChanged += (oldValue, newValue) => { ChangeColour(newValue); };
     }
 }
 

@@ -81,6 +81,11 @@ public class UIController : MonoBehaviour
         LoadGame();
     }
 
+    public void LoadServer()
+    {
+        SceneManager.LoadScene("Server");
+    }
+
 
 
 }
