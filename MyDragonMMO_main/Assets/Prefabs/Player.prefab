@@ -159,10 +159,10 @@ MonoBehaviour:
         byte0061: 0
   PlayerColourID:
     m_InternalValue: 0
-  thrustForce: 2
-  strafeForce: 1
-  verticalForce: 1
-  rotationSpeed: 0.2
+  thrustForce: 200
+  strafeForce: 100
+  verticalForce: 100
+  rotationSpeed: 20
   rb: {fileID: 8606622095871118287}
   materialBlue: {fileID: 2100000, guid: 94b7b163ffabb034a91fccbbff56750c, type: 2}
   materialOrange: {fileID: 2100000, guid: 38d52e1ca2fb45e4fa22d80590f16061, type: 2}

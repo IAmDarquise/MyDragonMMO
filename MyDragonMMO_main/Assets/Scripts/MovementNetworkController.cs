@@ -147,11 +147,11 @@ public class MovementNetworkController : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            rb.AddForce(transform.up * verticalForce, ForceMode.Force);
+            rb.AddForce(transform.up * verticalForce * Time.deltaTime, ForceMode.Force);
         }
         else if (Input.GetKey(KeyCode.LeftShift))
         {
-            rb.AddForce(-transform.up * verticalForce, ForceMode.Force);
+            rb.AddForce(-transform.up * verticalForce * Time.deltaTime, ForceMode.Force);
         }
 
     }
@@ -180,8 +180,8 @@ public class MovementNetworkController : NetworkBehaviour
             pitch = 1f;
         }
 
-        rb.AddTorque(transform.up * yaw * rotationSpeed, ForceMode.Force);
-        rb.AddTorque(transform.right * pitch * rotationSpeed, ForceMode.Force);
+        rb.AddTorque(transform.up * yaw * rotationSpeed * Time.deltaTime, ForceMode.Force);
+        rb.AddTorque(transform.right * pitch * rotationSpeed * Time.deltaTime, ForceMode.Force);
 
         Quaternion targetRotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
         Quaternion currentRotation = transform.rotation;
