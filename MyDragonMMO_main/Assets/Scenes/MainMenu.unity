@@ -1251,7 +1251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Custom Colour
+  m_text: Custom
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1793,6 +1793,9 @@ MonoBehaviour:
   colourPreview: {fileID: 1114573095}
   newColour: {r: 0, g: 0, b: 0, a: 0}
   playerMaterial: {fileID: 2100000, guid: 533dba87f46a1994592062a82b583d0d, type: 2}
+  blueMaterial: {fileID: 2100000, guid: 94b7b163ffabb034a91fccbbff56750c, type: 2}
+  orangeMaterial: {fileID: 2100000, guid: 38d52e1ca2fb45e4fa22d80590f16061, type: 2}
+  greenMaterial: {fileID: 2100000, guid: 4634e01ca38983e45a3e02fa9892b0cc, type: 2}
 --- !u!4 &1774177440
 Transform:
   m_ObjectHideFlags: 0

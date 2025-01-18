@@ -10,29 +10,37 @@ public class UIController : MonoBehaviour
     [SerializeField] private Image colourPreview;
     [SerializeField] private Color newColour;
     [SerializeField] private Material playerMaterial;
+    [SerializeField] private Material blueMaterial;
+    [SerializeField] private Material orangeMaterial;
+    [SerializeField] private Material greenMaterial;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Blue()
     {
-        PlayerPrefs.SetInt("Colour", 1);
+        PlayerPrefs.SetInt("Colour", 0);
+        playerMaterial.color = blueMaterial.color;
         LoadGame();
     }
     public void Orange()
     {
-        PlayerPrefs.SetInt("Colour", 2);
+        PlayerPrefs.SetInt("Colour", 0);
+        playerMaterial.color = orangeMaterial.color;
         LoadGame();
     }
 
     public void Green()
     {
-        PlayerPrefs.SetInt("Colour", 3);
+        PlayerPrefs.SetInt("Colour", 0);
+        playerMaterial.color = greenMaterial.color;
         LoadGame();
     }
 
     public void LoadGame()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         SceneManager.LoadScene("Client");
     }
 

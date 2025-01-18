@@ -77,12 +77,12 @@ public class NetworkUptime : NetworkBehaviour
 
         }
 
-        if(Input.GetKey(KeyCode.F3) && !isCanvasOn)
+        if(Input.GetKeyDown(KeyCode.F3) && !isCanvasOn)
         {
             canvas.enabled = true;
             isCanvasOn = true;
         }
-        else if (Input.GetKey(KeyCode.F3) && isCanvasOn)
+        else if (Input.GetKeyDown(KeyCode.F3) && isCanvasOn)
         {
             canvas.enabled= false;
             isCanvasOn = false;
